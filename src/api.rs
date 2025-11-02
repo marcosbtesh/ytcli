@@ -1,3 +1,3 @@
-pub fn search(query: &str) -> vec<String> {
+pub fn search(query: &str) -> Vec<String> {
     vec![format!("Fake result for {}", query)]
 }
