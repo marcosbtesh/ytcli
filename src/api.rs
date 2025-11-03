@@ -14,15 +14,22 @@ pub fn search(query: &str, page: i16) -> Vec<(String, String)> {
     let search_arg = format!("ytsearch{}offset{}:{}", per_page, offset, query);
 
     let output = Command::new("yt-dlp")
-        .arg(search_arg)
+        .arg(&search_arg)
         .arg("--print-json")
         .stdout(Stdio::piped())
         .output()
         .expect("Failed to run yt-dlp. Is it installed?");
 
-    // if !output.status.success() {
-    //     return vec![];
-    // }
+
+
+    eprintln!("yt-dlp stdout: {}", String::from_utf8_lossy(&output.stdout));
+    eprintln!("search Arg {}", &search_arg);
+    eprintln!("yt-dlp stderr: {}", String::from_utf8_lossy(&output.stderr));
+
+    if !output.status.success() {
+        eprintln!("yt-dlp command failed with status: {}", output.status);
+        return vec![];
+    }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
     let mut results = Vec::new();
